@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Honeypot Landing Page</title>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.8.0.min.js"></script>
+    <script>
+      var passwordCriteria = Math.floor(Math.random() * 5);
+      var passwordRegex;
+      var s3 = new AWS.S3(); // Create a new instance of the S3 service
+      var bucketName = "YourBucketName"; // Replace with your bucket name
+      
+      function validateForm() {
+        var username = document.forms["loginForm"]["username"].value;
+        var password = document.forms["loginForm"]["password"].value;
+        var usernameRegex = /^[a-zA-Z0-9]+$/;
+        switch (passwordCriteria) {
+          case 0:
+            passwordRegex = /(?=.*[0-9])/;
+            alert("Password must contain at least one number.");
+            break;
+          case 1:
+            passwordRegex = /(?=.*[!@#\$%\^&\*])/;
+            alert("Password must contain at least one special character.");
+            break;
+          case 2:
+            passwordRegex = /(?=.*[a-zA-Z])/;
+            alert("Password must contain at least one word.");
+            break;
+          case 3:
+            passwordRegex = /(?=.*[Mercury|Venus|Earth|Mars|Jupiter|Saturn|Uranus|Neptune])/;
+            alert("Password must contain at least one planet.");
+            break;
+          case 4:
+            passwordRegex = /(?=.*[Lion|Tiger|Bear|Wolf|Elephant|Giraffe|Zebra|Hippo])/;
+            alert("Password must contain at least one animal.");
+            break;
+          case 5:
+            passwordRegex = /(?=.*[scotland|ireland|ukraine|netherlands|belgium|australia|canada|russia])/;
+            alert("Password must contain at least one country.");
+            break;
+          case 6:
+            passwordRegex = /(?=.*[eminem|snoop dogg|dr dre|vanilla ice|obie trice|ice t|ice cube])/;
+            alert("Password must contain at least one rapper.");
+            break;
+        }
+
+        if (!usernameRegex.test(username)) {
+          alert("Invalid username. Only letters and numbers are allowed.");
+          logError("Invalid username. Only letters and numbers are allowed.", "username");
+          return false;
+        }
+        if (!passwordRegex.test(password)) {
+          alert("Invalid password. Please check the criteria above and try again.");
+          logError("Invalid password. Please check the criteria above and try again.", "password", password);
+          return false;
+        }
+
+        alert("Invalid login. Please try again.");
+        logError("Invalid login. Please try again.", "login", password);
+        return false;
+      }
+
+            function logError(errorMessage, errorType, password) {
+        var date = new Date();
+        console.log("Error Type: " + errorType + ", Error Message: " + errorMessage + ", Attempted Password: " + password + ", Time: " + date);
+
+        var loginAttempt = {
+          "errorType": errorType,
+          "errorMessage": errorMessage,
+          "password": password,
+          "time": date
+        }
+        var fileName = date.toISOString() + ".json"; // The file name can be in any format you prefer
+        var fileContent = JSON.stringify(loginAttempt); // Convert the login attempt object to a JSON string
+        var params = {
+          Bucket: bucketName,
+          Key: fileName,
+          Body: fileContent
+        };
+        s3.putObject(params, function (err, data) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log("Successfully uploaded login attempt to S3");
+          }
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Welcome to the Honeypot Landing Page</h1>
+    <p>This page is for security testing and monitoring purposes only. Any information entered will be collected for security purposes.</p>
+    <form name="loginForm" onsubmit="return validateForm()">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
