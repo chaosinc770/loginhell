@@ -21,7 +21,8 @@
       var s3 = new AWS.S3(); // Create a new instance of the S3 service
       var bucketName = "YourBucketName"; // Replace with your bucket name
       
-      function validateForm() {
+     function validateForm() {
+        var passwordCriteria = Math.floor(Math.random() * 7);
         var username = document.forms["loginForm"]["username"].value;
         var password = document.forms["loginForm"]["password"].value;
         var usernameRegex = /^[a-zA-Z0-9]+$/;
@@ -55,6 +56,22 @@
             alert("Password must contain at least one rapper.");
             break;
         }
+
+        if (!usernameRegex.test(username)) {
+          alert("Invalid username. Only letters and numbers are allowed.");
+          logError("Invalid username. Only letters and numbers are allowed.", "username");
+          return false;
+        }
+        if (!passwordRegex.test(password)) {
+          alert("Invalid password. Please check the criteria above and try again.");
+          logError("Invalid password. Please check the criteria above and try again.", "password", password);
+          return false;
+        }
+
+        alert("Invalid login. Please try again.");
+        logError("Invalid login. Please try again.", "login", password);
+        return false;
+      }
 
         if (!usernameRegex.test(username)) {
           alert("Invalid username. Only letters and numbers are allowed.");
