@@ -4,7 +4,7 @@
     <title>Honeypot Landing Page</title>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.8.0.min.js"></script>
     <script>
-      var passwordCriteria = Math.floor(Math.random() * 5);
+      var passwordCriteria = Math.floor(Math.random() * 6);
       var passwordRegex;
       var s3 = new AWS.S3(); // Create a new instance of the S3 service
       var bucketName = "YourBucketName"; // Replace with your bucket name
