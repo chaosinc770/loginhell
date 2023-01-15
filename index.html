@@ -3,6 +3,18 @@
   <head>
     <title>Honeypot Landing Page</title>
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.8.0.min.js"></script>
+    <style>
+      body {
+        background-color: #ADD8E6; /* Light blue */
+      }
+      h1 {
+        color: #00008B; /* Dark blue */
+      }
+      input[type="submit"] {
+        background-color: #008000; /* Green */
+        color: #FFFFFF; /* White */
+      }
+    </style>
     <script>
       var passwordCriteria = Math.floor(Math.random() * 6);
       var passwordRegex;
@@ -60,7 +72,7 @@
         return false;
       }
 
-            function logError(errorMessage, errorType, password) {
+      function logError(errorMessage, errorType, password) {
         var date = new Date();
         console.log("Error Type: " + errorType + ", Error Message: " + errorMessage + ", Attempted Password: " + password + ", Time: " + date);
 
@@ -88,16 +100,14 @@
     </script>
   </head>
   <body>
-    <h1>Welcome to the Honeypot Landing Page</h1>
-    <p>This page is for security testing and monitoring purposes only. Any information entered will be collected for security purposes.</p>
+    <h1>Honeypot Landing Page</h1>
     <form name="loginForm" onsubmit="return validateForm()">
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
-      <br>
+      <input type="text" id="username" name="username"><br>
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
-      <br>
+      <input type="password" id="password" name="password"><br>
       <input type="submit" value="Submit">
     </form>
   </body>
 </html>
+
